@@ -44,16 +44,23 @@ function renderBlog() {
             </div>
             <div class="blog-content">
                 <h3>
-                    <a href="blog-detail.html" target="_blank">
+                    <a href="blog-detail.html" target="_blank" style:"color: black;">
                         ${dataBlog[index].title}
                     </a>
                 </h3>
                 <div class="detail-blog-content">
-                    12 Jul 2021 22:30 WIB | Rezki Rahman
+                    ${getFullTime(dataBlog[index].postAt)} | ${dataBlog[index].author}                    
                 </div>
-                <p>
-                    ${dataBlog[index].content}
+                <p> 
+                    ${getDistanceTime(dataBlog[index].postAt)}
                 </p>
+                <p>
+                    ${dataBlog[index].description}
+                </p>
+                <p>
+                    ${dataBlog[index].tech}
+                </p>
+            
                 <div style="text-align: left; font-size: 20px; " >
                     <a href="" style="color: black;"><i class="fa-brands fa-instagram"></i></a>
                     <a href="" style="color: black;"><i class="fa-brands fa-facebook" ></i></a>
@@ -69,3 +76,60 @@ function renderBlog() {
         `
     }
 }
+
+function getFullTime(time) {
+    //time = new Date()
+    //console.log(time)
+    let monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dev']
+
+    let date = time.getDate()
+    console.log(date)
+
+    let monthIndex = time.getMonth()
+    console.log(monthIndex)
+
+    let year = time.getFullYear()
+    console.log(year)
+
+    let hours = time.getHours()
+    let minutes = time.getMinutes()
+
+    if (hours <=9) {
+        hours = "0" + hours 
+    } else if (minutes<=9) {
+        minutes = "0" + minutes
+    }
+
+    return `${date} ${monthName[monthIndex]} ${year} ${hours}:${minutes} WIB` 
+
+}
+
+function getDistanceTime(time) {
+    let timeNow = new Date()
+    let timePost = time
+    let distance = timeNow - timePost //milisecond
+    console.log(distance)
+
+    let milisecond = 1000
+    let secondInHours = 3600
+    let hoursInDay = 24
+
+    let distanceDay = Math.floor(distance/ (milisecond * secondInHours * hoursInDay))
+    let distancehours = Math.floor(distance / (milisecond * 60 * 60))
+    let distanceMinutes = Math.floor(distance / (milisecond * 60))
+    let distanceSecond = Math.floor(distance / milisecond)
+
+    if (distanceDay > 0){
+        return `${distanceDay} day ago`
+    } else if (distancehours > 0 ){
+        return `${distancehours} hour(s) ago`
+    } else if (distanceMinutes > 0){
+        return `${distanceMinutes} minute(s) ago`
+    } else {
+        return `${distanceSecond} second ago`
+    }
+}
+
+setInterval(function() {
+    renderBlog()
+}, 2000)
