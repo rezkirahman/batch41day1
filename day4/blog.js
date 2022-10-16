@@ -7,7 +7,37 @@ function addBlog(event) {
     let startDate = document.getElementById("input-startdate").value
     let endDate = document.getElementById("input-enddate").value
     let description = document.getElementById("input-content").value
-    let tech = document.getElementById("input-tech").value
+    let tech1 = document.getElementById("input-tech1").checked
+    let tech2 = document.getElementById("input-tech2").checked
+    let tech3 = document.getElementById("input-tech3").checked
+    let tech4 = document.getElementById("input-tech4").checked
+
+    if(tech1){
+        tech1=`<i class="fa-brands fa-node-js"></i>`
+    } else{
+        tech1=""
+    }
+
+    if(tech2){
+        tech2=`<i class="fa-brands fa-react"></i>`
+    } else{
+        tech2=""
+    }
+
+    if(tech3){
+        tech3=`<i class="fa-brands fa-js"></i>`
+    } else{
+        tech3=""
+    }
+
+    if(tech4){
+        tech4=`<i class="fa-sharp fa-solid fa-file-prescription"></i>`
+    } else{
+        tech4=""
+    }
+    
+    
+    
     let image = document.getElementById("input-blog-image").files[0]
 
     // buat url gambar nantinya tampil
@@ -18,7 +48,7 @@ function addBlog(event) {
         title,
         startDate,
         endDate,
-        tech,
+        tech1,tech2,tech3,tech4,
         description,
         image,
         postAt: new Date(),
@@ -38,6 +68,7 @@ function renderBlog() {
         console.log("test",dataBlog[index])
 
         document.getElementById("contents").innerHTML += `
+        <a href="blog-detail.html" style="text-decoration-line: none; color: black;">
         <div class="blog-list-item">
             <div class="blog-image">
                 <img src="${dataBlog[index].image}">
@@ -57,15 +88,12 @@ function renderBlog() {
                 <p>
                     ${dataBlog[index].description}
                 </p>
-                <p>
-                    ${dataBlog[index].tech}
-                </p>
             
                 <div style="text-align: left; font-size: 20px; " >
-                    <a href="" style="color: black;"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="" style="color: black;"><i class="fa-brands fa-facebook" ></i></a>
-                    <a href="" style="color: black;"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="" style="color: black;"><i class="fa-brands fa-linkedin"></i></a>
+                    ${dataBlog[index].tech1}
+                    ${dataBlog[index].tech2}
+                    ${dataBlog[index].tech3}
+                    ${dataBlog[index].tech4}
                 </div>
             </div>
             <div class="btn-group">
@@ -73,6 +101,7 @@ function renderBlog() {
                     <button class="btn-detail" style="margin-left: 4px;">Post Blog</button>
             </div>
         </div>
+        </a>
         `
     }
 }
@@ -99,7 +128,7 @@ function getFullTime(time) {
     } else if (minutes<=9) {
         minutes = "0" + minutes
     }
-
+        
     return `${date} ${monthName[monthIndex]} ${year} ${hours}:${minutes} WIB` 
 
 }
@@ -119,6 +148,10 @@ function getDistanceTime(time) {
     let distanceMinutes = Math.floor(distance / (milisecond * 60))
     let distanceSecond = Math.floor(distance / milisecond)
 
+    setInterval(function() {
+        renderBlog()
+    }, 2000)
+    
     if (distanceDay > 0){
         return `${distanceDay} day ago`
     } else if (distancehours > 0 ){
@@ -128,8 +161,6 @@ function getDistanceTime(time) {
     } else {
         return `${distanceSecond} second ago`
     }
+    
 }
 
-setInterval(function() {
-    renderBlog()
-}, 2000)
