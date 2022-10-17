@@ -75,9 +75,7 @@ function renderBlog() {
             </div>
             <div class="blog-content">
                 <h3>
-                    <a href="blog-detail.html" target="_blank" style:"color: black;">
                         ${dataBlog[index].title}
-                    </a>
                 </h3>
                 <div class="detail-blog-content">
                     ${getFullTime(dataBlog[index].postAt)} | ${dataBlog[index].author}                    
@@ -102,6 +100,7 @@ function renderBlog() {
             </div>
         </div>
         </a>
+        </div>
         `
     }
 }
@@ -151,7 +150,7 @@ function getDistanceTime(time) {
     setInterval(function() {
         renderBlog()
     }, 2000)
-    
+
     if (distanceDay > 0){
         return `${distanceDay} day ago`
     } else if (distancehours > 0 ){
