@@ -66,6 +66,7 @@ nav ul li img {
 
 img {
     width: 600px;
+    border-radius: 12px;
 }
 
 .detail-blog-card-left {
@@ -88,6 +89,7 @@ img {
 .detail-blog-title{
     margin-top: 64px;
     text-align: center;
+    margin-bottom: 24px;
 }
 
 .detail-blog-card-right-title{
