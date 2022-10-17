@@ -114,27 +114,25 @@ nav ul li img {
     display: flex;
     background-color: rgb(255, 255, 255);
     width: 350px;
-    margin: 64px 24px auto;
-    align-items: center;
-    box-shadow: 0 10px 40px rgb(199, 199, 199);
 }
 
 .blog-list-item {
+    align-items: center;
+    margin: 12px;
     color: black;
-    align-items: flex-start;
     text-decoration-line: none;
     flex-direction: row;
+    background-color: white;
+    box-shadow: 0 10px 40px rgb(199, 199, 199);
+    flex: 10%;
 }
 
-.blog-list .blog-list-item {
-    flex: 1;
-}
 
 .blog-image {
     width: 100%;
 }
 
-.blog-list .blog-list-item .blog-image img {
+.blog-image img {
     width: 350px;
     height: 200px;
     object-fit: cover;

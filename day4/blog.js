@@ -147,9 +147,9 @@ function getDistanceTime(time) {
     let distanceMinutes = Math.floor(distance / (milisecond * 60))
     let distanceSecond = Math.floor(distance / milisecond)
 
-    setInterval(function() {
-        renderBlog()
-    }, 2000)
+    //setInterval(function() {
+    //    renderBlog()
+    //}, 2000)
 
     if (distanceDay > 0){
         return `${distanceDay} day ago`
