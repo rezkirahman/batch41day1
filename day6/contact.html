@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Contact Form</title>
+        <link rel="stylesheet" href="contact.css">
+    </head>
+    <body>
+        <form action="">
+            <div>
+                <label for="input-name">Name</label>
+                <input type="text" id="input-name" required>
+            </div>
+            <div>
+                <label for="input-email">Email</label>
+                <input type="text" id="input-email" required>
+            </div>
+            <div>
+                <label for="input-number">Phone Number</label>
+                <input type="text" id="input-number" required>
+            </div>
+            <div>
+                <label for="">subject</label>
+                <select name="" id="input-subject" required>
+                    <option value="" hidden>subject</option>
+                    <option value="frontend">frontend</option>
+                    <option value="backend">backend</option>
+                    <option value="fullstack">fullstack</option>
+                </select>
+            </div>
+            <div>
+                <label for="input-message">your messasge</label>
+                <textarea name="" id="input-message" cols="30" rows="10"></textarea>
+            </div>
+            <div>
+                <button onclick="ShowData()">Submit</button>
+            </div>
+        </form>
+    </body>
+    <script src="contact.js"></script>
+</html>
