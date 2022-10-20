@@ -10,6 +10,35 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var Data = map[string]interface{}{
+	"title": "personal Web",
+}
+
+type Blog struct {
+	Title     string
+	Post_date string
+	Author    string
+	Content   string
+	Duration  string
+}
+
+var Blogs = []Blog{
+	{
+		Title:     "Dumbways Web App",
+		Post_date: "20 October 2022 22:30 WIB",
+		Author:    "Rezki Rahman",
+		Content:   "Lorem Ipsum",
+		Duration:  "2 Bulan",
+	},
+	{
+		Title:     "Dumbways Mobile App",
+		Post_date: "20 October 2022 22:30 WIB",
+		Author:    "Rezki Rahman",
+		Content:   "Lorem Ipsum dolor",
+		Duration:  "2 Bulan",
+	},
+}
+
 func main() {
 	route := mux.NewRouter()
 
@@ -20,9 +49,12 @@ func main() {
 	route.HandleFunc("/home", home).Methods("GET")
 	route.HandleFunc("/contact", contact).Methods("GET")
 	route.HandleFunc("/blog", blog).Methods("GET")
-	route.HandleFunc("/blogDetail", blogDetail).Methods("GET")
-	route.HandleFunc("/formBlog", formAddBlog).Methods("GET")
-	route.HandleFunc("/addBlog", addBlog).Methods("POST")
+	route.HandleFunc("/blog-detail/{index}", blogDetail).Methods("GET")
+	route.HandleFunc("/form-blog", formAddBlog).Methods("GET")
+	route.HandleFunc("/add-blog", addBlog).Methods("POST")
+	route.HandleFunc("/delete-blog/{index}", deleteBlog).Methods("GET")
+	route.HandleFunc("/form-update/{index}", updateForm).Methods("GET")
+	route.HandleFunc("/update-project/{index}", updateProject).Methods("POST")
 
 	fmt.Println("server running on port 8000")
 	http.ListenAndServe("localhost:8000", route)
@@ -42,8 +74,12 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	respData := map[string]interface{}{
+		"Blogs": Blogs,
+	}
+
 	w.WriteHeader(http.StatusOK)
-	tmpl.Execute(w, nil)
+	tmpl.Execute(w, respData)
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
@@ -84,12 +120,24 @@ func blogDetail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+	var BlogDetail = Blog{}
+
+	index, _ := strconv.Atoi(mux.Vars(r)["index"])
+
+	for i, data := range Blogs {
+		if index == i {
+			BlogDetail = Blog{
+				Title:     data.Title,
+				Content:   data.Content,
+				Post_date: data.Post_date,
+				Author:    data.Author,
+				Duration:  data.Duration,
+			}
+		}
+	}
 
 	data := map[string]interface{}{
-		"Title":  "pasar Coding",
-		"column": "lorem ipsum",
-		"Id":     id,
+		"Blog": BlogDetail,
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -119,5 +167,89 @@ func addBlog(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("title : " + r.PostForm.Get("inputTitle"))
 	fmt.Println("content :" + r.PostForm.Get("inputContent"))
 
-	http.Redirect(w, r, "/blog", http.StatusMovedPermanently)
+	var title = r.PostForm.Get("inputTitle")
+	var content = r.PostForm.Get("inputContent")
+
+	var newBlog = Blog{
+		Title:     title,
+		Content:   content,
+		Author:    "Rezki Rahman",
+		Post_date: "20 October 2022 22:30 WIB",
+		Duration:  "2Bulan",
+	}
+
+	Blogs = append(Blogs, newBlog)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
+}
+
+func deleteBlog(w http.ResponseWriter, r *http.Request) {
+	index, _ := strconv.Atoi(mux.Vars(r)["index"])
+	fmt.Println(index)
+
+	Blogs = append(Blogs[:index], Blogs[index+1:]...)
+	fmt.Println(Blogs)
+
+	http.Redirect(w, r, "/home", http.StatusFound)
+}
+
+func updateForm(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "text/html; charset-utf-8")
+
+	var tmpl, err = template.ParseFiles("views/form-update.html")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("message : " + err.Error()))
+		return
+	}
+
+	var update = Blog{}
+
+	index, _ := strconv.Atoi(mux.Vars(r)["index"])
+
+	for i, data := range Blogs {
+		if index == i {
+			update = Blog{
+				Title:     data.Title,
+				Content:   data.Content,
+				Post_date: data.Post_date,
+				Author:    data.Author,
+				Duration:  data.Duration,
+			}
+		}
+	}
+
+	data := map[string]interface{}{
+		"Blog": update,
+	}
+
+	w.WriteHeader(http.StatusOK)
+	tmpl.Execute(w, data)
+}
+
+func updateProject(w http.ResponseWriter, r *http.Request) {
+	index, _ := strconv.Atoi(mux.Vars(r)["index"])
+	fmt.Println(index)
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("title : " + r.PostForm.Get("editTitle"))
+	fmt.Println("content :" + r.PostForm.Get("editContent"))
+
+	var title = r.PostForm.Get("editTitle")
+	var content = r.PostForm.Get("editContent")
+
+	var newBlog = Blog{
+		Title:     title,
+		Content:   content,
+		Author:    "Rezki Rahman",
+		Post_date: "20 October 2022 22:30 WIB",
+		Duration:  "2Bulan",
+	}
+
+	Blogs[index] = newBlog
+
+	Blogs = append(Blogs)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }

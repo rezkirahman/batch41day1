@@ -26,7 +26,7 @@
                     <a href="/home" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/blog" class="nav-link">Add Project</a>
+                    <a href="/form-blog" class="nav-link">Add Project</a>
                 </li>
             </ul>
             <div>
@@ -72,83 +72,58 @@
     </div>
 
     <!-- MY PROJECT -->
-    <div style="padding:24px;" class="bg-white mt-5">
-        <h1 style="text-align: center;">MY PROJECT</h1>
+    <div class="bg-white mt-5 p-5">
+        <h1 style="text-align: center;" class="mt-3 mb-5">MY PROJECT</h1>
         <div class=" d-flex justify-content-center">
-            <div id="contents" class=" m-3">
-                <div class="card" style="width: 350px;">
-                    <a href="/blogDetail" style="text-decoration-line: none; color:black;">
-                        <div class="">
-                            <img src="public/image/christian-buehner-DItYlc26zVI-unsplash.jpg" width="350px"
-                                class="rounded-top">
-                        </div>
-                        <div class="card-body">
-                            <div class="">
-                                <h3 class="card-title">
-                                    Dumbways Web App
-                                </h3>
-                                <div>
-                                    12 Jul 2021 22:30 WIB | Rezki Rahman
-                                </div>
-                                <p>
-                                    Lorem ipsum,
-                                    dolor sit amet consectetur adipisicing elit. Quam, molestiae
-                                    numquam! Deleniti maiores expedita eaque deserunt quaerat! Dicta,
-                                    eligendi debitis?
-                                </p>
-                                <div style="text-align: left; font-size: 20px; ">
-                                    <a href="" style="color: black;"><i class="fa-brands fa-instagram"></i></a>
-                                    <a href="" style="color: black;"><i class="fa-brands fa-facebook"></i></a>
-                                    <a href="" style="color: black;"><i class="fa-brands fa-twitter"></i></a>
-                                    <a href="" style="color: black;"><i class="fa-brands fa-linkedin"></i></a>
-                                </div>
+            <div id="contents" class="row">
+                <!-- dynamic content here -->
+                {{range $index, $data := .Blogs}}
+                <div class="col mt-3">  
+                    <div class="card" style="width: 350px;">
+                        <a href="/blog-detail/{{$index}}" style="text-decoration-line: none; color:black;">
+                            <div>
+                                <img src="public/image/desktop.jpg" width="350px" class="card-image-top rounded-top">
                             </div>
-    
-                            <div class="mt-3">
-                                <button class="btn btn-dark" style="">Edit Post</button>
-                                <button class="btn btn-dark" style="">Post Blog</button>
-                            </div>
-                        </div>
-                    </a>
-                </div>                
-            </div>  
-            <div id="" class=" m-3">
-                <div class="card" style="width: 350px;">
-                    <a href="/blogDetail" style="text-decoration-line: none; color:black;">
-                        <div class="">
-                            <img src="public/image/christian-buehner-DItYlc26zVI-unsplash.jpg" width="350px"
-                                class="rounded-top">
-                        </div>
-                        <div class="card-body">
-                            <div class="">
-                                <h3 class="card-title">
-                                    Dumbways Web App
-                                </h3>
-                                <div>
-                                    12 Jul 2021 22:30 WIB | Rezki Rahman
+                            <div class="card-body">
+                                <div class="">
+                                    <h3 class="card-title">
+                                        {{$data.Title}}
+                                    </h3>
+                                    <div class="text-muted">
+                                        {{$data.Post_date}} <label for="">|</label> {{$data.Author}}
+                                    </div>
+                                    <div class="text-muted">
+
+                                    </div>
+                                    <p>
+                                        {{$data.Content}}
+                                    </p>
+                                    <div style="text-align: left; font-size: 20px; ">
+                                        <a href="" style="color: black;"><i class="fa-brands fa-instagram"></i></a>
+                                        <a href="" style="color: black;"><i class="fa-brands fa-facebook"></i></a>
+                                        <a href="" style="color: black;"><i class="fa-brands fa-twitter"></i></a>
+                                        <a href="" style="color: black;"><i class="fa-brands fa-linkedin"></i></a>
+                                    </div>
                                 </div>
-                                <p>
-                                    Lorem ipsum,
-                                    dolor sit amet consectetur adipisicing elit. Quam, molestiae
-                                    numquam! Deleniti maiores expedita eaque deserunt quaerat! Dicta,
-                                    eligendi debitis?
-                                </p>
-                                <div style="text-align: left; font-size: 20px; ">
-                                    <a href="" style="color: black;"><i class="fa-brands fa-instagram"></i></a>
-                                    <a href="" style="color: black;"><i class="fa-brands fa-facebook"></i></a>
-                                    <a href="" style="color: black;"><i class="fa-brands fa-twitter"></i></a>
-                                    <a href="" style="color: black;"><i class="fa-brands fa-linkedin"></i></a>
+
+                                <div class="mt-3">
+                                    <a href="/form-update/{{$index}}">
+                                        <button class="btn btn-dark" style="">Edit Post</button>
+                                    </a>
+                                    <a href="/delete-blog/{{$index}}">
+                                        <button class="btn btn-dark" style="">Delete Post</button>
+                                    </a>
+                                    
+                                    
                                 </div>
                             </div>
-    
-                            <div class="mt-3">
-                                <button class="btn btn-dark" style="">Edit Post</button>
-                                <button class="btn btn-dark" style="">Post Blog</button>
-                            </div>
-                        </div>
-                    </a>
-                </div>                
-            </div>       
+                        </a>
+                    </div>
+                    
+                </div>
+                {{end}}
+
+            </div>
         </div>
     </div>
 
