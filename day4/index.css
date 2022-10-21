@@ -55,6 +55,7 @@ nav ul li img {
     margin-right: 24px;;
 }
 
+
 .cards {
     display: flex;
     justify-content: space-between;
@@ -67,3 +68,5 @@ nav ul li img {
 .card right {
     flex: 50%;
 }
+
+
