@@ -250,6 +250,5 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 
 	Blogs[index] = newBlog
 
-	Blogs = append(Blogs)
 	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }

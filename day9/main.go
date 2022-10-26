@@ -87,6 +87,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 	for rows.Next(){
 		var each = Blog{} //memanggil struct
 
+		
+		
 		err := rows.Scan(&each.id, &each.Title, &each.Content)
 
 		if err != nil{
@@ -96,7 +98,10 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 		each.Author = "Rezki Rahman"
 		each.Post_date = "21 October 2022 11:01 WIB"
+		// var oneDay = 24*60*60*1000
+		// each.Duration = (each.stardate - each.enddate)/oneDay
 		result = append(result, each)
+		
 	}
 
 	respData := map[string]interface{}{
@@ -274,7 +279,5 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	Blogs[index] = newBlog
-
-	Blogs = append(Blogs)
 	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }
