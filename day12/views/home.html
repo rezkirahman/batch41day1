@@ -52,7 +52,7 @@
             </li>
             {{else}}
             <li class="nav-item">
-              <a href="/register" class="nav-link mx-1 my-1">Register</a>
+              <a href="/register" class="nav-link">Register</a>
             </li>
             <li class="nav-item">
               <a href="/login" class="nav-link">Login</a>
@@ -83,16 +83,10 @@
         <div class="col-xl-7 col-md-6 col-sm-12 justify-content-md-center d-flex flex-column">
           <h2 class="fw-bold pb-2">Hi Welcome to my blog</h2>
           <p style="text-align: justify;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure, quidem.
-            Doloribus beatae corrupti
-            accusamus repellendus natus, quibusdam quis eaque omnis quam deleniti? Totam illo et nesciunt
-            dicta
-            voluptas recusandae consectetur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-            optio
-            itaque minus, distinctio excepturi provident, eveniet ipsam quae illo velit facere modi nihil
-            laudantium, autem officia nam tenetur amet architecto?</p>
+            Doloribus beatae corruptiaccusamus repellendus natus, quibusdam quis eaque omnis quam deleniti? Totam illo et nesciuntdictavoluptas recusandae consectetur. Quia optio itaque minus, distinctio excepturi provident, eveniet ipsam quae illo velit facere modi nihillaudantium.</p>
 
           <div class="d-flex align-items-baseline">
-            <a href="/contactMe"><button class="btn btn-dark px-3 rounded-5 my-4" type="button">contact</button></a>
+            <a href="/contactMe"><button class="btn btn-dark px-3 rounded my-4" type="button">contact</button></a>
             <a href="#" class="mx-3 text-decoration-none text-dark">
               <p>download CV
                 <i class="fa-solid fa-download fa-lg ms-2"></i>
@@ -165,7 +159,7 @@
                       {{$data.NameProject}}
                     </h3>
                     <div class="text-muted">
-                     Duration : {{$data.Duration}}
+                     Duration : {{$data.Duration}} <label for="">|</label> {{$data.Author}}
                     </div>
                     <div class="text-muted">
                     </div>

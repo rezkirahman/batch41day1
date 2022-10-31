@@ -22,6 +22,7 @@ type SessionData struct {
 	IsLogin   bool
 	UserName  string
 	FlashData string
+	userID	int
 }
 
 var Data = SessionData{}
@@ -96,6 +97,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 	} else {
 		Data.IsLogin = session.Values["IsLogin"].(bool)
 		Data.UserName = session.Values["Name"].(string)
+		Data.userID = session.Values["ID"].(int)
+		
 	}
 
 	fm := session.Flashes("message")
@@ -109,14 +112,14 @@ func home(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	Data.FlashData = strings.Join(flashes, " ")
-	println(flashes)
-
+	println(flashes) 
+	
+	var result []Project
 	if session.Values["Islogin"] != true {
-		data, _ := connection.Conn.Query(context.Background(), "SELECT tb_project.id, tb_project.name_project, start_date, end_date, duration, description, technologies, image FROM tb_project ORDER BY id")
-		var result []Project
+		data, _ := connection.Conn.Query(context.Background(), `SELECT tb_project.id, tb_project.name_project, start_date, end_date, duration, description, technologies, image, tb_user.name FROM tb_project LEFT JOIN tb_user ON tb_project.author_id = tb_user.id WHERE "author_id"=$1`, Data.userID)//  
 		for data.Next() {
 			var each = Project{}
-			err := data.Scan(&each.Id, &each.NameProject, &each.StartDate, &each.EndDate, &each.Duration, &each.Description, &each.Technologies, &each.Image)
+			err := data.Scan(&each.Id, &each.NameProject, &each.StartDate, &each.EndDate, &each.Duration, &each.Description, &each.Technologies, &each.Image, &each.Author)
 			if err != nil {
 				fmt.Println(err.Error())
 				return
@@ -124,37 +127,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 			each.IsLogin = Data.IsLogin
 			result = append(result, each)
 		}
-
-		resData := map[string]interface{}{
-			"DataSession": Data,
-			"Projects":    result,
-		}
-		w.WriteHeader(http.StatusOK)
-
-		tmpl.Execute(w, resData)
-	} else {
-		sessionID := session.Values["ID"].(int)
-		data, _ := connection.Conn.Query(context.Background(), "SELECT tb_project.id, name_project, start_date, end_date, duration, description, technologies, image FROM tb_project WHERE tb_project.author_id = $1 ORDER BY id DESC", sessionID)
-		var result []Project
-		for data.Next() {
-			var each = Project{}
-			err := data.Scan(&each.Id, &each.NameProject, &each.StartDate, &each.EndDate, &each.Duration, &each.Description, &each.Technologies, &each.Image)
-			if err != nil {
-				fmt.Println(err.Error())
-				return
-			}
-			each.IsLogin = Data.IsLogin
-			result = append(result, each)
-		}
-
-		resData := map[string]interface{}{
-			"DataSession": Data,
-			"Projects":    result,
-		}
-		w.WriteHeader(http.StatusOK)
-
-		tmpl.Execute(w, resData)
+	} 
+	resData := map[string]interface{}{
+		"DataSession": Data,
+		"Projects":    result,
 	}
+	w.WriteHeader(http.StatusOK)
+	tmpl.Execute(w, resData)
 }
 func contactMe(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "text/html; charset=utf8")
@@ -191,6 +170,8 @@ func addProjectPost(w http.ResponseWriter, r *http.Request) {
 
 	var startDate = r.PostForm.Get("input-startDate")
 	var endDate = r.PostForm.Get("input-endDate")
+	start, _ := time.Parse("2006-01-02", startDate)
+	end, _ := time.Parse("2006-01-02", endDate)
 
 	technologies := []string{r.PostForm.Get("react"), r.PostForm.Get("javascript"), r.PostForm.Get("golang"), r.PostForm.Get("nodejs")}
 
@@ -201,10 +182,9 @@ func addProjectPost(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "SESSION_KEY")
 	author := session.Values["ID"].(int)
 
-	timePost, _ := time.Parse("2006-01-02", startDate)
-	timeNow, _ := time.Parse("2006-01-02", endDate)
-
-	hours := timeNow.Sub(timePost).Hours()
+	
+	//Get duration
+	hours := end.Sub(start).Hours()
 	days := hours / 24
 	weeks := math.Floor(days / 7)
 	months := math.Floor(days / 30)
@@ -228,7 +208,7 @@ func addProjectPost(w http.ResponseWriter, r *http.Request) {
 	println(hours)
 
 	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO public.tb_project (author_id, name_project, start_date, end_date, duration, description, technologies, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-		author, nameProject, timeNow, timePost, duration, description, technologies, image)
+		author, nameProject, start, end, duration, description, technologies, image)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("message : " + err.Error()))
@@ -314,14 +294,16 @@ func submitEdit(w http.ResponseWriter, r *http.Request) {
 	var golang = r.PostForm.Get("golang")
 	var nodejs = r.PostForm.Get("nodejs")
 	var technologies = []string{reactjs, javascript, golang, nodejs}
-	startDate, _ := time.Parse("2006-01-02", r.PostForm.Get("input-nameProject"))
-	endDate, _ := time.Parse("2006-01-02", r.PostForm.Get("input-endDate"))
+	var startDate = r.PostForm.Get("input-startDate")
+	var endDate = r.PostForm.Get("input-endDate")
+	start, _ := time.Parse("2006-01-02", startDate)
+	end, _ := time.Parse("2006-01-02", endDate)
 
 	dataContext := r.Context().Value("dataFile")
 	image := dataContext.(string)
 
 	//GET DURATION
-	hours := startDate.Sub(endDate).Hours()
+	hours := end.Sub(start).Hours()
 	days := hours / 24
 	weeks := math.Floor(days / 7)
 	months := math.Floor(days / 30)
@@ -345,7 +327,7 @@ func submitEdit(w http.ResponseWriter, r *http.Request) {
 	println(hours)
 
 	_, err = connection.Conn.Exec(context.Background(), "UPDATE public.tb_project SET name_project = $1, start_date = $2, end_date = $3, duration = $4, description = $5, technologies = $6, image = $7 WHERE id = $8",
-		nameProject, startDate, endDate, duration, description, technologies, image, id)
+		nameProject, start, end, duration, description, technologies, image, id)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

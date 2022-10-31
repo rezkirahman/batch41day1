@@ -35,7 +35,7 @@
           <a href="/home" class="nav-link">Home</a>
         </li>
         <li>
-          <a href="/addProject" class="nav-link active">Add Project</a>
+          <a href="/addProject" class="nav-link">Add Project</a>
         </li>
       </ul>
       <div class="navbar-collapse justify-content-end" id="navbarNavAltMarkup">
@@ -60,7 +60,7 @@
           <form action="/update-project/{{.editProject.Id}}" method="POST" enctype="multipart/form-data">
             <div
               style="width: 600px; margin: 0px auto; padding: 24px; background-color: white; border-radius: 10px;box-shadow: 0 10px 40px rgb(175, 175, 175)">
-              <h1 style="text-align: center; margin-bottom: 24px; ">ADD MY PROJECT</h1>
+              <h1 style="text-align: center; margin-bottom: 24px; ">UPDATE PROJECT</h1>
               <div class="form-group mb-2">
                 <label for="input-nameProject" class="form-label fw-semibold">Project Name</label>
                 <input class="form-control" id="input-nameProject" name="input-nameProject"
@@ -156,12 +156,12 @@
                 <div class="form-group my-3">
                   <label class="form-label fw-semibold">Upload Image</label><br>
                   <img src="../uploads/{{.editProject.Image}}" width="200">
-                  <div class="input-image-content">
-                    <input class="form-control" type="file" id="input-image" name="input-image" value="{{.editProject.Image}}">
+                  <div class="input-image-content my-3">
+                    <input class="form-control" type="file" id="input-image" name="input-image" value="{{.editProject.Image}}" required>
                   </div>
                 </div>
               </div>
-              <button class="btn btn-dark mt-3">Post Blog</button>
+              <button class="btn btn-dark mt-3">Update Project</button>
             </div>
         </div>
 
@@ -171,5 +171,4 @@
     </div>
   </section>
 </body>
-
 </html>
