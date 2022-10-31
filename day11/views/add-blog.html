@@ -40,22 +40,22 @@
     <div class="blog mt-5">
         <div class="blog-form ">
             <div class="form-container ">
-                <form action="/add-blog" method="POST">
+                <form action="/add-blog" method="POST" enctype="multipart/form-data">
                     <div
                         style="width: 600px; margin: 0px auto; padding: 24px; background-color: white; border-radius: 10px;box-shadow: 0 10px 40px rgb(175, 175, 175)">
                         <h1 style="text-align: center; margin-bottom: 24px; ">ADD MY PROJECT</h1>
                         <div class="form-group mb-2">
                             <label for="input-title">Project Name</label>
-                            <input class="form-control" id="input-title" name="inputTitle">
+                            <input class="form-control" id="input-title" name="inputTitle" required>
                         </div>
                         <div class="form-group mb-2" style="display: flex;">
                             <div style="flex:50%; margin-right: 4px;">
-                                <label for="input-startdate">Start Date</label>
-                                <input class="form-control" type="date" id="input-startdate">
+                                <label for="inputStartdate">Start Date</label>
+                                <input class="form-control" type="date" id="inputStartdate" name="inputStardate" required>
                             </div>
                             <div style="flex:50%; margin-left: 4px;">
-                                <label for="input-enddate">End Date</label>
-                                <input class="form-control" type="date" id="input-enddate">
+                                <label for="inputEnddate">End Date</label>
+                                <input class="form-control" type="date" id="inputEnddate name=inputEnddate" required>
                             </div>
                         </div>
                         <div class="form-group mb-2">
@@ -84,7 +84,7 @@
                                     <label for="input-blog-image">
                                         <!-- <img src="/public/image/desktop.jpg" alt=""> -->
                                     </label>
-                                    <input class="form-control" type="file" id="input-blog-image">
+                                    <input class="form-control" type="file" id="input-image" name="input-image" required>
                                 </div>
                             </div>
                         </div>
@@ -97,8 +97,7 @@
             </div>
         </div>
     </div>
-    <script src="blog.js"></script>
-
+    <!-- <script src="blog.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
         crossorigin="anonymous"></script>
